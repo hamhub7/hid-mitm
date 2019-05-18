@@ -31,14 +31,11 @@ static std::vector<std::pair<u64, u64>> rebind_config;
 static Mutex configMutex, pkgMutex;
 static struct input_msg cur_fakegamepad_state = {0};
 
-// initialize script counter and toggle flag
-int counter = 0;
-
 //reference vi var
 extern Event vsync_event;
 
 //create counter var and bool var
-int scriptIndex = -1;
+int scriptIndex = 0;
 
 void add_shmem(u64 pid, SharedMemory *real_shmem, SharedMemory *fake_shmem)
 {
@@ -161,33 +158,22 @@ void rebind_keys(int gamepad_ind)
         if (curTmpEnt->connectionState == 0)
             continue;
 
-        if(((curTmpEnt->buttons) & KEY_DLEFT))
+        if((curTmpEnt->buttons) & KEY_DLEFT)
         {
-            printf("counter: %i\n", scriptIndex);
-
             switch (scriptIndex)
             {
                 case 0:
                     (curTmpEnt->buttons) |= KEY_ZL;
-                    printf("in case 0\n");
                     break;
                 case 1:
                     (curTmpEnt->buttons) |= KEY_Y;
-                    printf("in case 1\n");
-                    //printf("%d\n", ((curTmpEnt->buttons) & KEY_Y) ? 1 : 0);
                     break;
                 default:
                     scriptIndex = -1;
-                    printf("in case default\n");
                     break;
             }
             ++scriptIndex;
-        }
-        /*else
-        {
-            scriptIndex = 0;
-        }*/
-               
+        }              
     }
     mutexUnlock(&configMutex);
 }
