@@ -36,6 +36,7 @@ extern Event vsync_event;
 
 //create counter var and bool var
 int scriptIndex = 0;
+bool on = false;
 
 void add_shmem(u64 pid, SharedMemory *real_shmem, SharedMemory *fake_shmem)
 {
@@ -158,7 +159,11 @@ void rebind_keys(int gamepad_ind)
         if (curTmpEnt->connectionState == 0)
             continue;
 
+        on = false;
         if((curTmpEnt->buttons) & KEY_DLEFT)
+            on = true;
+
+        if(on)
         {
             switch (scriptIndex)
             {
@@ -170,6 +175,7 @@ void rebind_keys(int gamepad_ind)
                     break;
                 default:
                     scriptIndex = -1;
+                    //on = false;
                     break;
             }
             ++scriptIndex;

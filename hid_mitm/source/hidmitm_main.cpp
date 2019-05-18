@@ -143,7 +143,7 @@ int main(int argc, char **argv)
     customHidInitialize();
     copyThreadInitialize();
 
-    FILE *file = fopen("sdmc:/count.txt", "a");
+    FILE *file = fopen("sdmc:/debuglog.txt", "a");
     dup2(fileno(file), STDOUT_FILENO);
 
     rc = eventWait(&vsync_event, 0xFFFFFFFFFFF);
