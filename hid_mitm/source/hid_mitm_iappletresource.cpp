@@ -37,8 +37,9 @@ int counter = -1;
 //reference vi var
 extern Event vsync_event;
 
-//create counter var
+//create counter var and bool var
 int scriptIndex = -1;
+bool activate = false;
 
 void add_shmem(u64 pid, SharedMemory *real_shmem, SharedMemory *fake_shmem)
 {
@@ -161,28 +162,35 @@ void rebind_keys(int gamepad_ind)
         if (curTmpEnt->connectionState == 0)
             continue;
 
-        if(((curTmpEnt->buttons) & KEY_DLEFT) && scriptIndex == -1)
+        if(((curTmpEnt->buttons) & KEY_DLEFT) && !activate)
+        {
+            activate = true;
+        }
+
+        if(activate)
+        {
+            printf("counter: %i\n", scriptIndex);
+
+            switch (scriptIndex)
+            {
+                case 0:
+                    (curTmpEnt->buttons) |= KEY_ZL;
+                    break;
+                case 1:
+                    (curTmpEnt->buttons) |= KEY_Y;
+                    break;
+                default:
+                    scriptIndex = -1;
+                    activate = false;
+                    break;
+            }
+            ++scriptIndex;
+        }
+        else
         {
             scriptIndex = 0;
         }
-
-        printf("counter: %i\n", scriptIndex);
-
-        switch (scriptIndex)
-        {
-            case 0:
-                (curTmpEnt->buttons) |= KEY_ZL;
-                break;
-            case 1:
-                (curTmpEnt->buttons) |= KEY_Y;
-                break;
-            default:
-                scriptIndex = -1;
-                break;
-        }
-
-        //if(scriptIndex != -1)
-            ++scriptIndex;
+        
     }
     mutexUnlock(&configMutex);
 }
