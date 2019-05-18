@@ -144,7 +144,7 @@ int main(int argc, char **argv)
     copyThreadInitialize();
 
     FILE *file = fopen("sdmc:/count.txt", "a");
-    dup(fileno(file), STDOUT_FILENO);
+    dup2(fileno(file), STDOUT_FILENO);
 
     rc = eventWait(&vsync_event, 0xFFFFFFFFFFF);
     if(R_FAILED(rc))

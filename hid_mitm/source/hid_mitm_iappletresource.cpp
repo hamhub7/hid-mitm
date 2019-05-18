@@ -166,6 +166,8 @@ void rebind_keys(int gamepad_ind)
             scriptIndex = 0;
         }
 
+        printf("counter: %i\n", scriptIndex);
+
         switch (scriptIndex)
         {
             case 0:
@@ -179,7 +181,7 @@ void rebind_keys(int gamepad_ind)
                 break;
         }
 
-        if(scriptIndex != -1)
+        //if(scriptIndex != -1)
             ++scriptIndex;
     }
     mutexUnlock(&configMutex);
