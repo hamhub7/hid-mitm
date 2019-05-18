@@ -183,10 +183,10 @@ void rebind_keys(int gamepad_ind)
             }
             ++scriptIndex;
         }
-        else
+        /*else
         {
             scriptIndex = 0;
-        }
+        }*/
                
     }
     mutexUnlock(&configMutex);
