@@ -32,7 +32,7 @@ static Mutex configMutex, pkgMutex;
 static struct input_msg cur_fakegamepad_state = {0};
 
 // initialize script counter and toggle flag
-int counter = -1;
+int counter = 0;
 
 //reference vi var
 extern Event vsync_event;
