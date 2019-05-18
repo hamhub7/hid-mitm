@@ -36,6 +36,9 @@ int counter = -1;
 //reference vi var
 extern Event vsync_event;
 
+//create counter var
+int scriptIndex = -1;
+
 void add_shmem(u64 pid, SharedMemory *real_shmem, SharedMemory *fake_shmem)
 {
     mutexLock(&shmem_mutex);
@@ -157,16 +160,26 @@ void rebind_keys(int gamepad_ind)
         if (curTmpEnt->connectionState == 0)
             continue;
 
-        if(((curTmpEnt->buttons) & KEY_DLEFT))
+        if(((curTmpEnt->buttons) & KEY_DLEFT) && scriptIndex == -1)
         {
-            (curTmpEnt->buttons) |= KEY_ZL;
-
-            Result rc = eventWait(&vsync_event, 0xFFFFFFFFFFF);
-            if(R_FAILED(rc))
-                fatalSimple(rc);
-
-            (curTmpEnt->buttons) |= KEY_Y;
+            scriptIndex = 0;
         }
+
+        switch (scriptIndex)
+        {
+            case 0:
+                (curTmpEnt->buttons) |= KEY_ZL;
+                break;
+            case 1:
+                (curTmpEnt->buttons) |= KEY_Y;
+                break;
+            default:
+                scriptIndex = -1;
+                break;
+        }
+
+        if(scriptIndex != -1)
+            ++scriptIndex;
     }
     mutexUnlock(&configMutex);
 }
@@ -289,7 +302,7 @@ void copy_thread(void* _)
 
     while (true)
     {
-        u64 curTime = svcGetSystemTick();
+        //u64 curTime = svcGetSystemTick();
 
         mutexLock(&shmem_mutex);
         mutexLock(&pkgMutex);
@@ -321,11 +334,15 @@ void copy_thread(void* _)
         }
         mutexUnlock(&shmem_mutex);
 
-        s64 time_rest = WANT_TIME - (svcGetSystemTick() - curTime);
+        /*s64 time_rest = WANT_TIME - (svcGetSystemTick() - curTime);
         if (time_rest > 0)
         {
             svcSleepThread((time_rest * 1e+9L) / 19200000);
-        }
+        }*/
+
+        Result rc = eventWait(&vsync_event, 0xFFFFFFFFFFF);
+        if(R_FAILED(rc))
+            fatalSimple(rc);
     }
 
     /*viCloseDisplay(&disp);
