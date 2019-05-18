@@ -175,13 +175,16 @@ void rebind_keys(int gamepad_ind)
             {
                 case 0:
                     (curTmpEnt->buttons) |= KEY_ZL;
+                    printf("in case 0\n");
                     break;
                 case 1:
                     (curTmpEnt->buttons) |= KEY_Y;
+                    printf("in case 1\n");
                     break;
                 default:
                     scriptIndex = -1;
                     activate = false;
+                    printf("in case default\n");
                     break;
             }
             ++scriptIndex;
