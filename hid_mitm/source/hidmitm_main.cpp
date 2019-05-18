@@ -18,6 +18,7 @@
 #include <cstdint>
 #include <cstring>
 #include <malloc.h>
+#include <unistd.h>
 
 #include <switch.h>
 #include <stratosphere.hpp>
@@ -141,6 +142,9 @@ int main(int argc, char **argv)
     consoleDebugInit(debugDevice_SVC);
     customHidInitialize();
     copyThreadInitialize();
+
+    FILE *file = fopen("sdmc:/count.txt", "a");
+    dup(fileno(file), STDOUT_FILENO);
 
     rc = eventWait(&vsync_event, 0xFFFFFFFFFFF);
     if(R_FAILED(rc))

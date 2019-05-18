@@ -6,6 +6,7 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <math.h>
+#include <iostream>
 #include "ini.h"
 #include "hid_custom.h"
 #include "udp_input.h"
