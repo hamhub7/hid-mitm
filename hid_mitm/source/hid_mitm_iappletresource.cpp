@@ -159,10 +159,10 @@ void rebind_keys(int gamepad_ind)
         if (curTmpEnt->connectionState == 0)
             continue;
 
-        on = false;
+       
         if((curTmpEnt->buttons) & KEY_DLEFT)
             on = true;
-
+        
         if(on)
         {
             switch (scriptIndex)
@@ -175,10 +175,12 @@ void rebind_keys(int gamepad_ind)
                     break;
                 default:
                     scriptIndex = -1;
-                    //on = false;
+                    on = false;
                     break;
             }
-            ++scriptIndex;
+
+            if(layout == LAYOUT_DEFAULT)
+                ++scriptIndex;
         }              
     }
     mutexUnlock(&configMutex);
@@ -317,10 +319,14 @@ void copy_thread(void* _)
                 apply_fake_gamepad(cur_fakegamepad_state);
             }
 
+            /*
             for (int i = CONTROLLER_PLAYER_1; i <= CONTROLLER_HANDHELD; i++)
             {
                 rebind_keys(i);
             }
+            */
+
+           rebind_keys(1);
 
             shmem_copy(&tmp_shmem_mem, it->second.second);
         }
