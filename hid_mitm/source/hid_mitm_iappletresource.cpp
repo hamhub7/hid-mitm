@@ -319,14 +319,12 @@ void copy_thread(void* _)
                 apply_fake_gamepad(cur_fakegamepad_state);
             }
 
-            /*
-            for (int i = CONTROLLER_PLAYER_1; i <= CONTROLLER_HANDHELD; i++)
+            /*for (int i = CONTROLLER_PLAYER_1; i <= CONTROLLER_HANDHELD; i++)
             {
                 rebind_keys(i);
-            }
-            */
+            }*/
 
-           rebind_keys(1);
+           rebind_keys(CONTROLLER_PLAYER_1);
 
             shmem_copy(&tmp_shmem_mem, it->second.second);
         }
